@@ -641,6 +641,8 @@ newDiv.parentNode.style.overflow = 'hidden';
         ``action_chain`` and ``modifier`` are defined, the click will be
         performed using ``modifier`` and ``action_chain`` will be ignored.
 
+        ``actionchainduration`` is used to override the default duration timeout set for actionchain based operations.
+
         Example:
         | Click Element | id:button |                   | # Would click element without any modifiers.               |
         | Click Element | id:button | CTRL              | # Would click element with CTLR key pressed down.          |
@@ -695,6 +697,8 @@ newDiv.parentNode.style.overflow = 'hidden';
         The Cursor is moved and the center of the element and x/y coordinates are
         calculated from that point.
 
+        ``actionchainduration`` is used to override the default duration timeout set for actionchain based operations.
+
         See the `Locating elements` section for details about the locator
         syntax.
         """
@@ -713,7 +717,8 @@ newDiv.parentNode.style.overflow = 'hidden';
     @keyword
     def double_click_element(self, locator: Union[WebElement, str], actionChainDuration = 250):
         """Double clicks the element identified by ``locator``.
-
+        ``actionchainduration`` is used to override the default duration timeout set for actionchain based operations.
+        
         See the `Locating elements` section for details about the locator
         syntax.
         """
@@ -739,6 +744,7 @@ newDiv.parentNode.style.overflow = 'hidden';
     @keyword
     def scroll_element_into_view(self, locator: Union[WebElement, str], actionChainDuration=250):
         """Scrolls the element identified by ``locator`` into view.
+        ``actionchainduration`` is used to override the default duration timeout set for actionchain based operations.
 
         See the `Locating elements` section for details about the locator
         syntax.
@@ -759,6 +765,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         The ``locator`` argument is the locator of the dragged element
         and the ``target`` is the locator of the target. See the
         `Locating elements` section for details about the locator syntax.
+        ``actionchainduration`` is used to override the default duration timeout set for actionchain based operations.
 
         Example:
         | `Drag And Drop` | css:div#element | css:div.target |
@@ -783,6 +790,7 @@ newDiv.parentNode.style.overflow = 'hidden';
 
         The element will be moved by ``xoffset`` and ``yoffset``, each of which
         is a negative or positive number specifying the offset.
+        ``actionchainduration`` is used to override the default duration timeout set for actionchain based operations.
 
         Example:
         | `Drag And Drop By Offset` | myElem | 50 | -35 | # Move myElem 50px right and 35px down |
@@ -802,6 +810,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         syntax.
 
         The element is pressed without releasing the mouse button.
+        ``actionchainduration`` is used to override the default duration timeout set for actionchain based operations.
 
         See also the more specific keywords `Mouse Down On Image` and
         `Mouse Down On Link`.
@@ -816,6 +825,7 @@ newDiv.parentNode.style.overflow = 'hidden';
     @keyword
     def mouse_out(self, locator: Union[WebElement, str], actionChainDuration=250):
         """Simulates moving the mouse away from the element ``locator``.
+        ``actionchainduration`` is used to override the default duration timeout set for actionchain based operations.
 
         See the `Locating elements` section for details about the locator
         syntax.
@@ -835,6 +845,7 @@ newDiv.parentNode.style.overflow = 'hidden';
     @keyword
     def mouse_over(self, locator: Union[WebElement, str], actionChainDuration=250):
         """Simulates hovering the mouse over the element ``locator``.
+        ``actionchainduration`` is used to override the default duration timeout set for actionchain based operations.
 
         See the `Locating elements` section for details about the locator
         syntax.
@@ -849,6 +860,7 @@ newDiv.parentNode.style.overflow = 'hidden';
     @keyword
     def mouse_up(self, locator: Union[WebElement, str], actionChainDuration=250):
         """Simulates releasing the left mouse button on the element ``locator``.
+        ``actionchainduration`` is used to override the default duration timeout set for actionchain based operations.
 
         See the `Locating elements` section for details about the locator
         syntax.
@@ -861,7 +873,9 @@ newDiv.parentNode.style.overflow = 'hidden';
 
     @keyword
     def open_context_menu(self, locator: Union[WebElement, str], actionChainDuration=250):
-        """Opens the context menu on the element identified by ``locator``."""
+        """Opens the context menu on the element identified by ``locator``.
+        ``actionchainduration`` is used to override the default duration timeout set for actionchain based operations.
+        """
         element = self.find_element(locator)
         # _unwrap_eventfiring_element can be removed when minimum required Selenium is 4.0 or greater.
         element = _unwrap_eventfiring_element(element)
@@ -1000,8 +1014,9 @@ return !element.dispatchEvent(evt);
         return [link.get_attribute("id") for link in links]
 
     @keyword
-    def mouse_down_on_link(self, locator: Union[WebElement, str]):
+    def mouse_down_on_link(self, locator: Union[WebElement, str], actionChainDuration=250):
         """Simulates a mouse down event on a link identified by ``locator``.
+        ``actionchainduration`` is used to override the default duration timeout set for actionchain based operations.
 
         See the `Locating elements` section for details about the locator
         syntax. When using the default locator strategy, links are searched
@@ -1010,7 +1025,7 @@ return !element.dispatchEvent(evt);
         element = self.find_element(locator, tag="link")
         # _unwrap_eventfiring_element can be removed when minimum required Selenium is 4.0 or greater.
         element = _unwrap_eventfiring_element(element)
-        action = ActionChains(self.driver)
+        action = ActionChains(self.driver, actionChainDuration)
         action.click_and_hold(element).perform()
 
     @keyword
@@ -1052,7 +1067,8 @@ return !element.dispatchEvent(evt);
     @keyword
     def mouse_down_on_image(self, locator: Union[WebElement, str], actionChainDuration=250):
         """Simulates a mouse down event on an image identified by ``locator``.
-
+        ``actionchainduration`` is used to override the default duration timeout set for actionchain based operations.
+        
         See the `Locating elements` section for details about the locator
         syntax. When using the default locator strategy, images are searched
         using ``id``, ``name``, ``src`` and ``alt``.
