@@ -619,6 +619,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         locator: Union[WebElement, str],
         modifier: Union[bool, str] = False,
         action_chain: bool = False,
+        actionChainDuration = 250
     ):
         """Click the element identified by ``locator``.
 
@@ -652,14 +653,14 @@ newDiv.parentNode.style.overflow = 'hidden';
         if is_truthy(modifier):
             self._click_with_modifier(locator, [None, None], modifier)
         elif action_chain:
-            self._click_with_action_chain(locator)
+            self._click_with_action_chain(locator, actionChainDuration)
         else:
             self.info(f"Clicking element '{locator}'.")
             self.find_element(locator).click()
 
-    def _click_with_action_chain(self, locator: Union[WebElement, str]):
+    def _click_with_action_chain(self, locator: Union[WebElement, str], actionChainDuration = 250):
         self.info(f"Clicking '{locator}' using an action chain.")
-        action = ActionChains(self.driver)
+        action = ActionChains(self.driver, actionChainDuration)
         element = self.find_element(locator)
         # _unwrap_eventfiring_element can be removed when minimum required Selenium is 4.0 or greater.
         element = _unwrap_eventfiring_element(element)
@@ -687,7 +688,7 @@ newDiv.parentNode.style.overflow = 'hidden';
 
     @keyword
     def click_element_at_coordinates(
-        self, locator: Union[WebElement, str], xoffset: int, yoffset: int
+        self, locator: Union[WebElement, str], xoffset: int, yoffset: int, actionChainDuration = 250
     ):
         """Click the element ``locator`` at ``xoffset/yoffset``.
 
@@ -703,14 +704,14 @@ newDiv.parentNode.style.overflow = 'hidden';
         element = self.find_element(locator)
         # _unwrap_eventfiring_element can be removed when minimum required Selenium is 4.0 or greater.
         element = _unwrap_eventfiring_element(element)
-        action = ActionChains(self.driver)
+        action = ActionChains(self.driver, actionChainDuration)
         action.move_to_element(element)
         action.move_by_offset(xoffset, yoffset)
         action.click()
         action.perform()
 
     @keyword
-    def double_click_element(self, locator: Union[WebElement, str]):
+    def double_click_element(self, locator: Union[WebElement, str], actionChainDuration = 250):
         """Double clicks the element identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -720,7 +721,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         element = self.find_element(locator)
         # _unwrap_eventfiring_element can be removed when minimum required Selenium is 4.0 or greater.
         element = _unwrap_eventfiring_element(element)
-        action = ActionChains(self.driver)
+        action = ActionChains(self.driver, actionChainDuration)
         action.double_click(element).perform()
 
     @keyword
@@ -736,7 +737,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         self.driver.execute_script("arguments[0].focus();", element)
 
     @keyword
-    def scroll_element_into_view(self, locator: Union[WebElement, str]):
+    def scroll_element_into_view(self, locator: Union[WebElement, str], actionChainDuration=250):
         """Scrolls the element identified by ``locator`` into view.
 
         See the `Locating elements` section for details about the locator
@@ -747,11 +748,11 @@ newDiv.parentNode.style.overflow = 'hidden';
         element = self.find_element(locator)
         # _unwrap_eventfiring_element can be removed when minimum required Selenium is 4.0 or greater.
         element = _unwrap_eventfiring_element(element)
-        ActionChains(self.driver).move_to_element(element).perform()
+        ActionChains(self.driver, actionChainDuration).move_to_element(element).perform()
 
     @keyword
     def drag_and_drop(
-        self, locator: Union[WebElement, str], target: Union[WebElement, str]
+        self, locator: Union[WebElement, str], target: Union[WebElement, str], actionChainDuration=250
     ):
         """Drags the element identified by ``locator`` into the ``target`` element.
 
@@ -768,12 +769,12 @@ newDiv.parentNode.style.overflow = 'hidden';
         target = self.find_element(target)
         # _unwrap_eventfiring_element can be removed when minimum required Selenium is 4.0 or greater.
         target = _unwrap_eventfiring_element(target)
-        action = ActionChains(self.driver)
+        action = ActionChains(self.driver, actionChainDuration)
         action.drag_and_drop(element, target).perform()
 
     @keyword
     def drag_and_drop_by_offset(
-        self, locator: Union[WebElement, str], xoffset: int, yoffset: int
+        self, locator: Union[WebElement, str], xoffset: int, yoffset: int, actionChainDuration=250
     ):
         """Drags the element identified with ``locator`` by ``xoffset/yoffset``.
 
@@ -789,12 +790,12 @@ newDiv.parentNode.style.overflow = 'hidden';
         element = self.find_element(locator)
         # _unwrap_eventfiring_element can be removed when minimum required Selenium is 4.0 or greater.
         element = _unwrap_eventfiring_element(element)
-        action = ActionChains(self.driver)
+        action = ActionChains(self.driver, actionChainDuration)
         action.drag_and_drop_by_offset(element, xoffset, yoffset)
         action.perform()
 
     @keyword
-    def mouse_down(self, locator: Union[WebElement, str]):
+    def mouse_down(self, locator: Union[WebElement, str], actionChainDuration=250):
         """Simulates pressing the left mouse button on the element ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -809,11 +810,11 @@ newDiv.parentNode.style.overflow = 'hidden';
         element = self.find_element(locator)
         # _unwrap_eventfiring_element can be removed when minimum required Selenium is 4.0 or greater.
         element = _unwrap_eventfiring_element(element)
-        action = ActionChains(self.driver)
+        action = ActionChains(self.driver, actionChainDuration)
         action.click_and_hold(element).perform()
 
     @keyword
-    def mouse_out(self, locator: Union[WebElement, str]):
+    def mouse_out(self, locator: Union[WebElement, str], actionChainDuration=250):
         """Simulates moving the mouse away from the element ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -826,13 +827,13 @@ newDiv.parentNode.style.overflow = 'hidden';
         size = element.size
         offsetx = (size["width"] / 2) + 1
         offsety = (size["height"] / 2) + 1
-        action = ActionChains(self.driver)
+        action = ActionChains(self.driver, actionChainDuration)
         action.move_to_element(element)
         action.move_by_offset(offsetx, offsety)
         action.perform()
 
     @keyword
-    def mouse_over(self, locator: Union[WebElement, str]):
+    def mouse_over(self, locator: Union[WebElement, str], actionChainDuration=250):
         """Simulates hovering the mouse over the element ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -842,11 +843,11 @@ newDiv.parentNode.style.overflow = 'hidden';
         element = self.find_element(locator)
         # _unwrap_eventfiring_element can be removed when minimum required Selenium is 4.0 or greater.
         element = _unwrap_eventfiring_element(element)
-        action = ActionChains(self.driver)
+        action = ActionChains(self.driver, actionChainDuration)
         action.move_to_element(element).perform()
 
     @keyword
-    def mouse_up(self, locator: Union[WebElement, str]):
+    def mouse_up(self, locator: Union[WebElement, str], actionChainDuration=250):
         """Simulates releasing the left mouse button on the element ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -856,15 +857,15 @@ newDiv.parentNode.style.overflow = 'hidden';
         element = self.find_element(locator)
         # _unwrap_eventfiring_element can be removed when minimum required Selenium is 4.0 or greater.
         element = _unwrap_eventfiring_element(element)
-        ActionChains(self.driver).release(element).perform()
+        ActionChains(self.driver, actionChainDuration).release(element).perform()
 
     @keyword
-    def open_context_menu(self, locator: Union[WebElement, str]):
+    def open_context_menu(self, locator: Union[WebElement, str], actionChainDuration=250):
         """Opens the context menu on the element identified by ``locator``."""
         element = self.find_element(locator)
         # _unwrap_eventfiring_element can be removed when minimum required Selenium is 4.0 or greater.
         element = _unwrap_eventfiring_element(element)
-        action = ActionChains(self.driver)
+        action = ActionChains(self.driver, actionChainDuration)
         action.context_click(element).perform()
 
     @keyword
@@ -1049,7 +1050,7 @@ return !element.dispatchEvent(evt);
         self.assert_page_not_contains(locator, "link", message, loglevel)
 
     @keyword
-    def mouse_down_on_image(self, locator: Union[WebElement, str]):
+    def mouse_down_on_image(self, locator: Union[WebElement, str], actionChainDuration=250):
         """Simulates a mouse down event on an image identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -1059,7 +1060,7 @@ return !element.dispatchEvent(evt);
         element = self.find_element(locator, tag="image")
         # _unwrap_eventfiring_element can be removed when minimum required Selenium is 4.0 or greater.
         element = _unwrap_eventfiring_element(element)
-        action = ActionChains(self.driver)
+        action = ActionChains(self.driver, actionChainDuration)
         action.click_and_hold(element).perform()
 
     @keyword
